@@ -18,19 +18,23 @@
 // #define TRACKING_WHEEL_ROTATIONAL_SENSOR 9
 
 #define MOGO 'H'
-#define DOINKER 'A'
+#define HOOD 'A'
 
-void toggle_intake(bool intake_power, bool intake_reversed) {
+void set_intake(bool intake_power, bool main_intake_reversed, bool back_intake_roller_reversed) {
   if (intake_power) {
-      if (intake_reversed) {
+      if (main_intake_reversed) {
         motor_move(LOWER_INTAKE_PORT, -127);
         motor_move(MIDDLE_INTAKE_PORT, 127);
         motor_move(BACK_INTAKE_PORT, 127);
-      } else if (!intake_reversed) {
+      } else if (!main_intake_reversed) {
         motor_move(LOWER_INTAKE_PORT, 127);
         motor_move(MIDDLE_INTAKE_PORT, -127);
-        motor_move(BACK_INTAKE_PORT, -127);
+
+        // control the back intake roller separately from the rest of the intake so that the intake can be going forward, moving the balls up and through while at the same time the back intake roller can spin reversed to score on the center goal if desired since they're lower than the long goals.
+        if (!back_intake_roller_reversed) motor_move(BACK_INTAKE_PORT, -127);
+        else if (back_intake_roller_reversed) motor_move(BACK_INTAKE_PORT, 127);
       }
+
     } else if(!intake_power) {
       motor_move(LOWER_INTAKE_PORT, 0);
       motor_move(MIDDLE_INTAKE_PORT, 0);
@@ -43,7 +47,7 @@ void on_center_button() {}
 
 void initialize() {
   adi_port_set_config(MOGO, E_ADI_DIGITAL_OUT);
-  adi_port_set_config(DOINKER, E_ADI_DIGITAL_OUT);
+  adi_port_set_config(HOOD, E_ADI_DIGITAL_OUT);
   if (usd_is_installed() == 0) {
     controller_print(E_CONTROLLER_MASTER, 0, 0, "No uSD card!");
   } else if (!competition_is_connected() && usd_is_installed() == 1) {
@@ -88,71 +92,37 @@ void competition_initialize() {
 
 
 void autonomous() {
-  /* ---------------------------------------- */
-  // left side either color scores preload only
-  /* ---------------------------------------- */
-  rotation_reset(9);
-  adi_digital_write(MOGO, true);
-  // turn(LEFT_FRONT_PORT, LEFT_REAR_PORT, LEFT_MIDDLE_PORT, RIGHT_FRONT_PORT, RIGHT_REAR_PORT, RIGHT_MIDDLE_PORT, 4, 160);
-  toggle_intake(true, true);
-  delay(250); // release the front intake part
-  toggle_intake(false, false);
-
-  // Score the Preload
-  move(LEFT_FRONT_PORT, LEFT_REAR_PORT, LEFT_MIDDLE_PORT, RIGHT_FRONT_PORT, RIGHT_REAR_PORT, RIGHT_MIDDLE_PORT, 1270, true, false);
-  delay(50);
-  turn(LEFT_FRONT_PORT, LEFT_REAR_PORT, LEFT_MIDDLE_PORT, RIGHT_FRONT_PORT, RIGHT_REAR_PORT, RIGHT_MIDDLE_PORT, 30);
-  delay(50);
-  move(LEFT_FRONT_PORT, LEFT_REAR_PORT, LEFT_MIDDLE_PORT, RIGHT_FRONT_PORT, RIGHT_REAR_PORT, RIGHT_MIDDLE_PORT, 1700, true, true);
-  adi_digital_write(MOGO, false); // turn on the mogo
-  delay(150);
-  move(LEFT_FRONT_PORT, LEFT_REAR_PORT, LEFT_MIDDLE_PORT, RIGHT_FRONT_PORT, RIGHT_REAR_PORT, RIGHT_MIDDLE_PORT, 1300, false, true);
-  toggle_intake(true, false); // make sure it's not too high and will get stuck by briefly reversing the intake
-  delay(1000); // delay until the ring is at least on the top of the mogo if not totally scored
-  turn(LEFT_FRONT_PORT, LEFT_REAR_PORT, LEFT_MIDDLE_PORT, RIGHT_FRONT_PORT, RIGHT_REAR_PORT, RIGHT_MIDDLE_PORT, 110);
-  delay(150);
-  move(LEFT_FRONT_PORT, LEFT_REAR_PORT, LEFT_MIDDLE_PORT, RIGHT_FRONT_PORT, RIGHT_REAR_PORT, RIGHT_MIDDLE_PORT, 500, false, true);
-  delay(1500);
-  toggle_intake(false, false);
-  turn(LEFT_FRONT_PORT, LEFT_REAR_PORT, LEFT_MIDDLE_PORT, RIGHT_FRONT_PORT, RIGHT_REAR_PORT, RIGHT_MIDDLE_PORT, 265);
-  move(LEFT_FRONT_PORT, LEFT_REAR_PORT, LEFT_MIDDLE_PORT, RIGHT_FRONT_PORT, RIGHT_REAR_PORT, RIGHT_MIDDLE_PORT, 1400, false, true); // back up into the ladder
-  motor_move(LEFT_FRONT_PORT, 0);
-  motor_move(LEFT_REAR_PORT, 0);
-  motor_move(LEFT_MIDDLE_PORT, 0);
-  motor_move(RIGHT_FRONT_PORT, 0);
-  motor_move(RIGHT_REAR_PORT, 0);
-  motor_move(RIGHT_MIDDLE_PORT, 0);
-
+// set later
 }
 
 
 void opcontrol() {
-  bool mogo_extended = true, doinker_extended = false;
-  bool intake_power = false;
-  bool intake_reversed = false;
+  bool mogo_extended = true, hood_extended = false;
   uint32_t count = 0;
   controller_clear(E_CONTROLLER_MASTER); // Clear all lines of the controller screen so the whole screen can be displayed to
   while (true) {
     
     move_drivetrain(LEFT_FRONT_PORT, LEFT_REAR_PORT, LEFT_MIDDLE_PORT, RIGHT_FRONT_PORT, RIGHT_REAR_PORT, RIGHT_MIDDLE_PORT, (controller_get_analog(CONTROLLER_MASTER, ANALOG_LEFT_Y))/127.0f, controller_get_analog(CONTROLLER_MASTER, ANALOG_RIGHT_X)/127.0f);
 
-    // Toggle the intake or intake directions when bumpers are pressed (UPDATE WHEN THE PHYSICAL DESIGN IS SET)
-    if (controller_get_digital_new_press(E_CONTROLLER_MASTER, E_CONTROLLER_DIGITAL_L1)) {
-      intake_power = !intake_power;
-      toggle_intake(intake_power, intake_reversed);
-    } else if (controller_get_digital_new_press(E_CONTROLLER_MASTER, E_CONTROLLER_DIGITAL_R1)) {
-      intake_reversed = !intake_reversed;
-      toggle_intake(intake_power, intake_reversed);
+    // update later to what Jonathan wants
+    if (controller_get_digital(E_CONTROLLER_MASTER, E_CONTROLLER_DIGITAL_L1)) {
+      set_intake(true, false, false); // intake all spins forward
+    } else if (controller_get_digital(E_CONTROLLER_MASTER, E_CONTROLLER_DIGITAL_L2)) {
+      set_intake(true, false, true); // intake spins forward except the back roller spins in reverse
+    } else if (controller_get_digital(E_CONTROLLER_MASTER, E_CONTROLLER_DIGITAL_R1)) {
+      set_intake(true, true, true); // intake all spins backward
+    } else {
+      set_intake(false, false, false); // intake off 
     }
     
     // Toggle the mogo pistons pneumatics when X is pressed on the controller
     if (controller_get_digital_new_press(E_CONTROLLER_MASTER, E_CONTROLLER_DIGITAL_X)) { 
       mogo_extended = !mogo_extended;
       adi_digital_write(MOGO, mogo_extended);
-    } // Toggle the doinker pneumatics when A is pressed on the controller
+    } // Toggle the hood pneumatics when A is pressed on the controller
     if (controller_get_digital_new_press(E_CONTROLLER_MASTER, E_CONTROLLER_DIGITAL_A)) { 
-      doinker_extended = !doinker_extended;
-      adi_digital_write(DOINKER, doinker_extended);
+      hood_extended = !hood_extended;
+      adi_digital_write(HOOD, hood_extended);
     }
 
     // Update Controller Screen
@@ -163,8 +133,8 @@ void opcontrol() {
     } else if (count % 10 == 0) {
         controller_print(E_CONTROLLER_MASTER, 1, 0, "brain: %f", battery_get_capacity());
     } else if (count % 10 == 5) {
-      if (mogo_extended) { controller_print(E_CONTROLLER_MASTER, 2, 0, "piston open ");
-      } else if (!mogo_extended) { controller_print(E_CONTROLLER_MASTER, 2, 0, "piston closed "); }
+      if (hood_extended) { controller_print(E_CONTROLLER_MASTER, 2, 0, "hood shut");
+      } else if (!hood_extended) { controller_print(E_CONTROLLER_MASTER, 2, 0, "hood open"); }
     }
 
     count++;
