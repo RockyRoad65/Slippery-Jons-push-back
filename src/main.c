@@ -14,21 +14,24 @@
 #define MIDDLE_INTAKE_PORT 2
 #define BACK_INTAKE_PORT 3 
 
+int8_t middle_intake_speed = 127; // we need to speed this up later and also change the gear ratio for the back intake so it's faster but this will keep it from getting stuck rolling on both.
+
 // #define INERTIAL_SENSOR 4
 // #define TRACKING_WHEEL_ROTATIONAL_SENSOR 9
 
 #define MOGO 'H'
 #define HOOD 'A'
 
+
 void set_intake(bool intake_power, bool main_intake_reversed, bool back_intake_roller_reversed) {
   if (intake_power) {
       if (main_intake_reversed) {
         motor_move(LOWER_INTAKE_PORT, -127);
-        motor_move(MIDDLE_INTAKE_PORT, 127);
+        motor_move(MIDDLE_INTAKE_PORT, middle_intake_speed);
         motor_move(BACK_INTAKE_PORT, 127);
       } else if (!main_intake_reversed) {
         motor_move(LOWER_INTAKE_PORT, 127);
-        motor_move(MIDDLE_INTAKE_PORT, -127);
+        motor_move(MIDDLE_INTAKE_PORT, -1*middle_intake_speed);
 
         // control the back intake roller separately from the rest of the intake so that the intake can be going forward, moving the balls up and through while at the same time the back intake roller can spin reversed to score on the center goal if desired since they're lower than the long goals.
         if (!back_intake_roller_reversed) motor_move(BACK_INTAKE_PORT, -127);
@@ -53,7 +56,7 @@ void initialize() {
   } else if (!competition_is_connected() && usd_is_installed() == 1) {
     controller_print(E_CONTROLLER_MASTER, 0, 0, "B to record auton..");
   }
-  adi_digital_write(MOGO, true);
+  adi_digital_write(MOGO, false);
   imu_reset_blocking(4);
   rotation_reset(9);
 }
@@ -97,7 +100,7 @@ void autonomous() {
 
 
 void opcontrol() {
-  bool mogo_extended = true, hood_extended = false;
+  bool mogo_extended = false, hood_extended = false;
   uint32_t count = 0;
   controller_clear(E_CONTROLLER_MASTER); // Clear all lines of the controller screen so the whole screen can be displayed to
   while (true) {
