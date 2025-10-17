@@ -19,7 +19,7 @@ int8_t middle_intake_speed = 127; // we need to speed this up later and also cha
 // #define INERTIAL_SENSOR 4
 // #define TRACKING_WHEEL_ROTATIONAL_SENSOR 9
 
-#define MOGO 'H'
+#define MATCH_LOADER 'H'
 #define HOOD 'A'
 
 
@@ -49,14 +49,14 @@ void set_intake(bool intake_power, bool main_intake_reversed, bool back_intake_r
 void on_center_button() {}
 
 void initialize() {
-  adi_port_set_config(MOGO, E_ADI_DIGITAL_OUT);
+  adi_port_set_config(MATCH_LOADER, E_ADI_DIGITAL_OUT);
   adi_port_set_config(HOOD, E_ADI_DIGITAL_OUT);
   if (usd_is_installed() == 0) {
     controller_print(E_CONTROLLER_MASTER, 0, 0, "No uSD card!");
   } else if (!competition_is_connected() && usd_is_installed() == 1) {
     controller_print(E_CONTROLLER_MASTER, 0, 0, "B to record auton..");
   }
-  adi_digital_write(MOGO, false);
+  adi_digital_write(MATCH_LOADER, false);
   imu_reset_blocking(4);
   rotation_reset(9);
 }
@@ -100,7 +100,7 @@ void autonomous() {
 
 
 void opcontrol() {
-  bool mogo_extended = false, hood_extended = false;
+  bool match_loader_extended = false, hood_extended = false;
   uint32_t count = 0;
   controller_clear(E_CONTROLLER_MASTER); // Clear all lines of the controller screen so the whole screen can be displayed to
   while (true) {
@@ -118,10 +118,10 @@ void opcontrol() {
       set_intake(false, false, false); // intake off 
     }
     
-    // Toggle the mogo pistons pneumatics when X is pressed on the controller
+    // Toggle the match unloader piston when X is pressed on the controller
     if (controller_get_digital_new_press(E_CONTROLLER_MASTER, E_CONTROLLER_DIGITAL_X)) { 
-      mogo_extended = !mogo_extended;
-      adi_digital_write(MOGO, mogo_extended);
+      match_loader_extended = !match_loader_extended;
+      adi_digital_write(MATCH_LOADER, match_loader_extended);
     } // Toggle the hood pneumatics when A is pressed on the controller
     if (controller_get_digital_new_press(E_CONTROLLER_MASTER, E_CONTROLLER_DIGITAL_A)) { 
       hood_extended = !hood_extended;
