@@ -76,6 +76,9 @@ void initialize(void);
 void disabled(void);
 void competition_initialize(void);
 void opcontrol(void);
+
+
+void set_intake(bool intake_power, bool main_intake_reversed, bool back_intake_roller_reversed);
 #ifdef __cplusplus
 }
 #endif

@@ -12,7 +12,7 @@
 
 #define LOWER_INTAKE_PORT 20
 #define MIDDLE_INTAKE_PORT 2
-#define BACK_INTAKE_PORT 3 
+#define BACK_INTAKE_PORT -3 
 
 int8_t middle_intake_speed = 127; // we need to speed this up later and also change the gear ratio for the back intake so it's faster but this will keep it from getting stuck rolling on both.
 
@@ -56,7 +56,7 @@ ez::Drive chassis(
     {RIGHT_FRONT_PORT, RIGHT_MIDDLE_PORT, RIGHT_REAR_PORT},  // Right Chassis Ports
 
     INERTIAL_SENSOR,      // IMU Port
-    2.875, // wheel diameter (remember slightly bigger than what vex says
+    2.8125, // wheel diameter (remember slightly bigger than what vex says
     450);   // Wheel RPM = cartridge * (motor gear / wheel gear)
 
 // Uncomment the trackers you're using here!
@@ -65,7 +65,7 @@ ez::Drive chassis(
 // - `2.75` is the wheel diameter
 // - `4.0` is the distance from the center of the wheel to the center of the robot
 // ez::tracking_wheel horiz_tracker(8, 2.75, 4.0);  // This tracking wheel is perpendicular to the drive wheels
-    ez::tracking_wheel vert_tracker(TRACKING_WHEEL_ROTATIONAL_SENSOR, 2.875, 0.75);   // This tracking wheel is parallel to the drive wheels
+    ez::tracking_wheel vert_tracker(TRACKING_WHEEL_ROTATIONAL_SENSOR, 2.0625, 0);   // This tracking wheel is parallel to the drive wheels
 
 /**
  * Runs initialization code. This occurs as soon as the program is started.
@@ -122,6 +122,8 @@ void initialize() {
       {"go backward off the line", goofftheline},
       {"left blue score three rings\n\nnot on the alliance stake\nposition same as the one that does\n", left_blue_auton_no_alliance_stake},
       {"right red score three rings\n\nnot on the alliance stake\nposition same as the one that does\n", right_red_auton_no_alliance_stake}*/
+
+      {"right red side testing", right_red}
   });
 
   // Initialize chassis and auton selector

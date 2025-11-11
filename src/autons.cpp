@@ -62,6 +62,37 @@ void default_constants() {
 
   // change this later to the actual degree value
 }
+void right_red() {
+  adi_digital_write(HOOD, true);
+  chassis.pid_drive_set(8_in, DRIVE_SPEED, true); // go forwards (right from driver's POV) away from the park area
+  chassis.pid_wait();
+  chassis.pid_turn_set(-90_deg, TURN_SPEED); // turn towards the three balls
+  chassis.pid_wait();
+  set_intake(true, false, false);
+  chassis.pid_drive_set(22_in, DRIVE_SPEED, true); // go toward the three balls
+  chassis.pid_wait();
+  chassis.pid_drive_set(11_in, 55, true); // slow down to get the balls easier
+  chassis.pid_wait(); // pick up the three balls
+
+  chassis.pid_turn_set(25_deg, TURN_SPEED); // go kind of towards the corner of the field 
+  chassis.pid_wait();
+  chassis.pid_drive_set(29_in, DRIVE_SPEED, true); 
+  chassis.pid_wait();
+  set_intake(false, false, false); // turn off the intake
+  chassis.pid_turn_set(90_deg, TURN_SPEED); // turn to the right angle so the robot can back up into the goal
+  chassis.pid_wait();
+  chassis.pid_drive_set(-12_in, DRIVE_SPEED, true); // back up into the goal
+  chassis.pid_wait();
+  set_intake(true, false, false); // turn on the intake
+  adi_digital_write(HOOD, false); // open the hood so balls can come out
+  delay(900); // wait a little bit and then all the balls will be scored
+  
+  // Drive toward the match loader with the piston out
+  adi_digital_write(MATCH_LOADER, true);
+  adi_digital_write(HOOD, false); // open the hood so balls can come out
+  chassis.pid_drive_set(26.5_in, DRIVE_SPEED, true);
+  chassis.pid_wait();
+}
 /*
 void right_red_auton_three_rings() {
   // release the front intake part by unhooking the rubber band
