@@ -99,7 +99,7 @@ void right_auto() {
   chassis.pid_wait();
   chassis.pid_drive_set(0.5_in, DRIVE_SPEED, true);
   chassis.pid_wait();
-  delay(350);
+  delay(370);
   chassis.pid_drive_set(-4_in, 127, true); // go away from the match loader tube
   chassis.pid_wait();
   set_intake(false, false, false); // intake off
@@ -108,7 +108,7 @@ void right_auto() {
   chassis.pid_wait();
   chassis.pid_drive_set(54_in, DRIVE_SPEED, true); // go to lower goal
   chassis.pid_wait();
-  set_intake(true, true, true); // intake all spins backward
+  set_intake(true, true, true, 80); // intake all spins backward but slower so it doesn't go all the way through the bottom goal
 }
 /*
 void right_red_auton_three_rings() {

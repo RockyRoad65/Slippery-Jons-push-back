@@ -14,7 +14,6 @@
 #define MIDDLE_INTAKE_PORT 2
 #define BACK_INTAKE_PORT -3 
 
-int8_t middle_intake_speed = 127; // we need to speed this up later and also change the gear ratio for the back intake so it's faster but this will keep it from getting stuck rolling on both.
 
 #define INERTIAL_SENSOR 4
 #define TRACKING_WHEEL_ROTATIONAL_SENSOR 9
@@ -27,19 +26,19 @@ using namespace pros::c;
 using namespace pros;
 // Just so I didn't have to change my original c code as much. It probably should be done eventually
 
-void set_intake(bool intake_power, bool main_intake_reversed, bool back_intake_roller_reversed) {
+void set_intake(bool intake_power, bool main_intake_reversed, bool back_intake_roller_reversed, int8_t intake_speed) { // intake speed default 127
   if (intake_power) {
       if (main_intake_reversed) {
-        motor_move(LOWER_INTAKE_PORT, -127);
-        motor_move(MIDDLE_INTAKE_PORT, middle_intake_speed);
-        motor_move(BACK_INTAKE_PORT, 127);
+        motor_move(LOWER_INTAKE_PORT, -1*intake_speed);
+        motor_move(MIDDLE_INTAKE_PORT, intake_speed);
+        motor_move(BACK_INTAKE_PORT, intake_speed);
       } else if (!main_intake_reversed) {
-        motor_move(LOWER_INTAKE_PORT, 127);
-        motor_move(MIDDLE_INTAKE_PORT, -1*middle_intake_speed);
+        motor_move(LOWER_INTAKE_PORT, intake_speed);
+        motor_move(MIDDLE_INTAKE_PORT, -1*intake_speed);
 
         // control the back intake roller separately from the rest of the intake so that the intake can be going forward, moving the balls up and through while at the same time the back intake roller can spin reversed to score on the center goal if desired since they're lower than the long goals.
-        if (!back_intake_roller_reversed) motor_move(BACK_INTAKE_PORT, -127);
-        else if (back_intake_roller_reversed) motor_move(BACK_INTAKE_PORT, 127);
+        if (!back_intake_roller_reversed) motor_move(BACK_INTAKE_PORT, -1*intake_speed);
+        else if (back_intake_roller_reversed) motor_move(BACK_INTAKE_PORT, intake_speed);
       }
 
     } else if(!intake_power) {
