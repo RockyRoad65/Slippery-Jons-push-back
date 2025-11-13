@@ -62,7 +62,7 @@ void default_constants() {
 
   // change this later to the actual degree value
 }
-void right_red() {
+void right_auto() {
   adi_digital_write(HOOD, true);
   chassis.pid_drive_set(8_in, DRIVE_SPEED, true); // go forwards (right from driver's POV) away from the park area
   chassis.pid_wait();
