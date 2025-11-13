@@ -282,11 +282,7 @@ void opcontrol() {
     }
 
     // Update Controller Screen
-    if (count % 400 == 200 && !competition_is_connected() && usd_is_installed() == 1) {
-      controller_print(E_CONTROLLER_MASTER, 0, 0, "B to record auton..");
-    } else if (count % 400 == 0 && usd_is_installed() == 1) {
-      controller_print(E_CONTROLLER_MASTER, 0, 0, "up--auton selector");
-    } else if (count % 10 == 0) {
+    if (count % 10 == 0) {
         controller_print(E_CONTROLLER_MASTER, 1, 0, "brain: %f", battery_get_capacity());
     } else if (count % 10 == 5) {
       if (hood_extended) { controller_print(E_CONTROLLER_MASTER, 2, 0, "hood shut");

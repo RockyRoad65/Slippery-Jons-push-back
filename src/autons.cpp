@@ -66,31 +66,40 @@ void right_red() {
   adi_digital_write(HOOD, true);
   chassis.pid_drive_set(8_in, DRIVE_SPEED, true); // go forwards (right from driver's POV) away from the park area
   chassis.pid_wait();
-  chassis.pid_turn_set(-90_deg, TURN_SPEED); // turn towards the three balls
+  chassis.pid_turn_set(-89_deg, TURN_SPEED); // turn towards the three balls
   chassis.pid_wait();
   set_intake(true, false, false);
-  chassis.pid_drive_set(22_in, DRIVE_SPEED, true); // go toward the three balls
+  chassis.pid_drive_set(21_in, DRIVE_SPEED-10, true); // go toward the three balls
   chassis.pid_wait();
-  chassis.pid_drive_set(11_in, 55, true); // slow down to get the balls easier
+  chassis.pid_drive_set(15_in, 40, true); // slow down to get the balls easier
   chassis.pid_wait(); // pick up the three balls
 
   chassis.pid_turn_set(25_deg, TURN_SPEED); // go kind of towards the corner of the field 
   chassis.pid_wait();
-  chassis.pid_drive_set(29_in, DRIVE_SPEED, true); 
+  chassis.pid_drive_set(28.5_in, DRIVE_SPEED, true); 
   chassis.pid_wait();
   set_intake(false, false, false); // turn off the intake
-  chassis.pid_turn_set(90_deg, TURN_SPEED); // turn to the right angle so the robot can back up into the goal
+  chassis.pid_turn_set(95_deg, TURN_SPEED); // turn to the right angle so the robot can back up into the goal
   chassis.pid_wait();
-  chassis.pid_drive_set(-12_in, DRIVE_SPEED, true); // back up into the goal
+  chassis.pid_drive_set(-11_in, DRIVE_SPEED, true); // back up into the goal
   chassis.pid_wait();
   set_intake(true, false, false); // turn on the intake
   adi_digital_write(HOOD, false); // open the hood so balls can come out
-  delay(900); // wait a little bit and then all the balls will be scored
+  delay(1700); // wait a little bit and then all the balls will be scored
   
   // Drive toward the match loader with the piston out
   adi_digital_write(MATCH_LOADER, true);
-  adi_digital_write(HOOD, false); // open the hood so balls can come out
-  chassis.pid_drive_set(26.5_in, DRIVE_SPEED, true);
+  set_intake(false, false, false);
+  delay(150);
+  adi_digital_write(HOOD, true); // close the hood
+  set_intake(true, false, false); // intake on
+  chassis.pid_drive_set(28.75_in, 70, true);
+  chassis.pid_wait();
+  delay(1200);
+  chassis.pid_drive_set(-4_in, 127, true); // go away from the match loader tube
+  chassis.pid_wait();
+  chassis.pid_turn_set(225_deg, TURN_SPEED); // turn toward the lower goal
+  adi_digital_write(MATCH_LOADER, false);
   chassis.pid_wait();
 }
 /*
