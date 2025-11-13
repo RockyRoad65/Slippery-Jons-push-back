@@ -122,7 +122,8 @@ void initialize() {
       {"left blue score three rings\n\nnot on the alliance stake\nposition same as the one that does\n", left_blue_auton_no_alliance_stake},
       {"right red score three rings\n\nnot on the alliance stake\nposition same as the one that does\n", right_red_auton_no_alliance_stake}*/
 
-      {"right side testing", right_auto}
+      {"right side testing", right_auto},
+      {"left side testing", left_auto}
   });
 
   // Initialize chassis and auton selector

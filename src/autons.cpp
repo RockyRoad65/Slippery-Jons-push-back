@@ -76,7 +76,7 @@ void right_auto() {
 
   chassis.pid_turn_set(25_deg, TURN_SPEED); // go kind of towards the corner of the field 
   chassis.pid_wait();
-  chassis.pid_drive_set(28.5_in, DRIVE_SPEED, true); 
+  chassis.pid_drive_set(28.5_in, 120, true); 
   chassis.pid_wait();
   set_intake(false, false, false); // turn off the intake
   chassis.pid_turn_set(90_deg, TURN_SPEED); // turn to the right angle so the robot can back up into the goal
@@ -100,7 +100,7 @@ void right_auto() {
   chassis.pid_drive_set(0.5_in, DRIVE_SPEED, true);
   chassis.pid_wait();
   delay(370);
-  chassis.pid_drive_set(-4_in, 127, true); // go away from the match loader tube
+  chassis.pid_drive_set(-5_in, 127, true); // go away from the match loader tube
   chassis.pid_wait();
   set_intake(false, false, false); // intake off
   chassis.pid_turn_set(225_deg, TURN_SPEED); // turn toward the lower goal
@@ -108,530 +108,52 @@ void right_auto() {
   chassis.pid_wait();
   chassis.pid_drive_set(54_in, DRIVE_SPEED, true); // go to lower goal
   chassis.pid_wait();
-  set_intake(true, true, true, 80); // intake all spins backward but slower so it doesn't go all the way through the bottom goal
-}
-/*
-void right_red_auton_three_rings() {
-  // release the front intake part by unhooking the rubber band
-  toggle_intake(true, true);
-  delay(200);
-  toggle_intake(false, false);
+  set_intake(true, true, true, 120); // intake all spins backward but slower so it doesn't go all the way through the bottom goal
+} void left_auto() {
+  adi_digital_write(HOOD, true);
+  chassis.pid_drive_set(8_in, DRIVE_SPEED, true); // go forwards (right from driver's POV) away from the park area
+  chassis.pid_wait();
+  chassis.pid_turn_set(89_deg, TURN_SPEED); // turn towards the three balls
+  chassis.pid_wait();
+  set_intake(true, false, false);
+  chassis.pid_drive_set(21_in, DRIVE_SPEED-10, true); // go toward the three balls
+  chassis.pid_wait();
+  chassis.pid_drive_set(15_in, 40, true); // slow down to get the balls easier
+  chassis.pid_wait(); // pick up the three balls
+
+  chassis.pid_turn_set(-25_deg, TURN_SPEED); // go kind of towards the corner of the field 
+  chassis.pid_wait();
+  chassis.pid_drive_set(28.5_in, 120, true); 
+  chassis.pid_wait();
+  set_intake(false, false, false); // turn off the intake
+  chassis.pid_turn_set(-90_deg, TURN_SPEED); // turn to the right angle so the robot can back up into the goal
+  chassis.pid_wait();
+  chassis.pid_drive_set(-11_in, DRIVE_SPEED, true); // back up into the goal
+  chassis.pid_wait();
+  set_intake(true, false, false); // turn on the intake
+  adi_digital_write(HOOD, false); // open the hood so balls can come out
+  delay(1700); // wait a little bit and then all the balls will be scored
   
-  adi_digital_write(MOGO, false);
-  chassis.pid_drive_set(-20.5_in, DRIVE_SPEED, true); // back up
-  chassis.pid_wait();
-  chassis.pid_turn_set(-30_deg, TURN_SPEED); // Turn to the mogo
-  chassis.pid_wait();
-  chassis.pid_drive_set(-16_in, 80, true); // back up into the mogo.
-  chassis.pid_wait();
-  chassis.pid_drive_set(-8_in, 80, true); // keep backing up the mogo while clamping onto it.
-  delay(90);
-  adi_digital_write(MOGO, true); // clamp on the mogo while slowly moving
-  chassis.pid_wait();
-
-  chassis.pid_turn_set(-72_deg, TURN_SPEED); // Turn towards the rings
-  chassis.pid_wait();
-  toggle_intake(true, false);
-
-  chassis.pid_drive_set(28_in, DRIVE_SPEED, true); // move toward the rings
-  chassis.pid_wait();
-  toggle_intake(true, true); // briefly reverse the intake so the hook can't get stuck
-  delay(100);
-  toggle_intake(true, false);
-
-  delay(650); // make sure it has some time to pick up the ring before turning again
-  chassis.pid_turn_set(-25_deg, TURN_SPEED);
-  toggle_intake(true, true); // briefly reverse the intake so the hook can't get stuck
-  delay(100);
-  toggle_intake(true, false);
-  chassis.pid_wait();
-  chassis.pid_drive_set(20_in, DRIVE_SPEED, false); // move towards the four rings in the corner
-  chassis.pid_wait();
-  chassis.pid_turn_set(5_deg, TURN_SPEED);
-  chassis.pid_wait();
-  chassis.pid_drive_set(10_in, DRIVE_SPEED, false); // move towards the four rings in the corner
-  chassis.pid_wait();
-  chassis.pid_turn_set(-45_deg, TURN_SPEED);
-  chassis.pid_wait();
-  chassis.pid_drive_set(14_in, 127, true); // pickup the bottom ring
-  chassis.pid_wait();
-  delay(2000);
-  toggle_intake(true, false);
-  chassis.pid_drive_set(-15_in, 15, true);
-  chassis.pid_wait();
-  chassis.pid_turn_set(153_deg, TURN_SPEED);
-  chassis.pid_wait();
-  chassis.pid_drive_set(47_in, DRIVE_SPEED, true); // go to ladder
-  chassis.pid_wait();
-  adi_digital_write(DOINKER, true);
-  chassis.drive_mode_set(ez::DISABLE); // disable the PID after autonomous is done
-
-
-}void left_blue_auton_three_rings() {
-  // release the front intake part by unhooking the rubber band
-  toggle_intake(true, true);
-  delay(200);
-  toggle_intake(false, false);
-
-  adi_digital_write(MOGO, false);
-  chassis.pid_drive_set(-20.5_in, DRIVE_SPEED, true); // back up
-  chassis.pid_wait();
-  chassis.pid_turn_set(30_deg, TURN_SPEED); // Turn to the mogo
-  chassis.pid_wait();
-  chassis.pid_drive_set(-16_in, 80, true); // back up into the mogo.
-  chassis.pid_wait();
-  chassis.pid_drive_set(-8_in, 80, true); // keep backing up the mogo while clamping onto it.
-  delay(90);
-  adi_digital_write(MOGO, true); // clamp on the mogo while slowly moving
-  chassis.pid_wait();
-
-  chassis.pid_turn_set(73_deg, TURN_SPEED); // Turn towards the rings
-  chassis.pid_wait();
-  toggle_intake(true, false);
-
-  chassis.pid_drive_set(28_in, DRIVE_SPEED, true); // move toward the rings
-  chassis.pid_wait();
-  toggle_intake(true, true); // briefly reverse the intake so the hook can't get stuck
-  delay(100);
-  toggle_intake(true, false);
-  delay(650); // make sure it has some time to pick up the ring before turning again
-  chassis.pid_turn_set(30_deg, TURN_SPEED);
-  chassis.pid_wait();
-  chassis.pid_drive_set(20_in, DRIVE_SPEED, false); // move towards the four rings in the corner chassis.pid_wait();
-  chassis.pid_wait();
-  chassis.pid_turn_set(0_deg, TURN_SPEED);
-  chassis.pid_wait();
-
-  chassis.pid_drive_set(12_in, DRIVE_SPEED, false); // move towards the four rings in the corner
-  chassis.pid_wait();
-  chassis.pid_turn_set(45_deg, TURN_SPEED);
-  chassis.pid_wait();
-  chassis.pid_drive_set(13_in, 127, true); // pickup the bottom ring
-  chassis.pid_wait();
-  uint16_t i = 0;
-  while(!adi_digital_read(LIMIT) && i < 3200) { i+=10; delay(10); if(i < 1200 && i > 1180) {chassis.pid_drive_set(-1_in, DRIVE_SPEED, false);chassis.pid_wait();}}
-  chassis.pid_drive_set(-15_in, 15, true);
-  chassis.pid_wait();
-  chassis.pid_turn_set(-146_deg, TURN_SPEED);
-  chassis.pid_wait();
-  chassis.pid_drive_set(47_in, DRIVE_SPEED, true); // go to ladder
-  chassis.pid_wait();
-  adi_digital_write(DOINKER, true);
-  chassis.drive_mode_set(ez::DISABLE); // disable the PID after autonomous is done
-}*//*void left_red_auton_four_rings() {
-  // release the front intake part by unhooking the rubber band
-  toggle_intake(true, true);
-  delay(200);
-  toggle_intake(false, false);
-
-  chassis.pid_drive_set(-20.5_in, DRIVE_SPEED, true); // back up
-  chassis.pid_wait();
-  adi_digital_write(MOGO, false);
-  chassis.pid_turn_set(30_deg, TURN_SPEED); // Turn to the mogo
-  chassis.pid_wait();
-  chassis.pid_drive_set(-16_in, 80, true); // back up into the mogo.
-  chassis.pid_wait();
-  chassis.pid_drive_set(-8_in, 80, true); // keep backing up the mogo while clamping onto it.
-  delay(90);
-  adi_digital_write(MOGO, true); // clamp on the mogo while slowly moving
-  chassis.pid_wait();
-  chassis.pid_drive_set(9.5_in, DRIVE_SPEED, true); // keep backing up the mogo while clamping onto it.
-  delay(100);
-  toggle_intake(true, false);
-  chassis.pid_wait();
-  chassis.pid_turn_set(135_deg, TURN_SPEED);
-  chassis.pid_wait();
-  chassis.pid_drive_set(18.5_in, DRIVE_SPEED, true); // score the first ring, the closer ring to the ladder of the rings in the middle on the bottom
-  delay(100);
-  toggle_intake(true, true); // briefly reverse the intake so the hook can't get stuck
-  delay(100);
-  toggle_intake(true, false);
-  chassis.pid_wait();
-  delay(800);
-  chassis.pid_drive_set(-20.5_in, DRIVE_SPEED, true);
-  chassis.pid_wait();
-  chassis.pid_drive_set(10_in, DRIVE_SPEED, true);
-  chassis.pid_wait();
-  chassis.pid_turn_set(70_deg, TURN_SPEED);
-  chassis.pid_wait();
-  chassis.pid_drive_set(10_in, 40, true);
+  // Drive toward the match loader with the piston out
+  adi_digital_write(MATCH_LOADER, true);
+  set_intake(false, false, false);
   delay(150);
-  toggle_intake(true, true); // briefly reverse the intake so the hook can't get stuck
-  delay(100);
-  toggle_intake(true, false);
+  adi_digital_write(HOOD, true); // close the hood
+  set_intake(true, false, false); // intake on
+  chassis.pid_drive_set(29_in, 70, true);
   chassis.pid_wait();
-  chassis.pid_turn_set(125_deg, TURN_SPEED);
+  chassis.pid_drive_set(-1.25_in, 50, true); // move back out of the tube a little to get the balls in the right spot
   chassis.pid_wait();
-  chassis.pid_drive_set(10_in, DRIVE_SPEED, true);
+  chassis.pid_drive_set(0.5_in, DRIVE_SPEED, true);
   chassis.pid_wait();
-  toggle_intake(true, true); // briefly reverse the intake so the hook can't get stuck
-  delay(100);
-  toggle_intake(true, false);
-  chassis.pid_turn_set(165_deg, TURN_SPEED);
-  chassis.pid_wait();
-  chassis.pid_drive_set(7_in, DRIVE_SPEED, true);
-  chassis.pid_wait();
-  chassis.pid_drive_set(-10_in, DRIVE_SPEED, true);
-  chassis.pid_wait();
-  chassis.pid_turn_set(215_deg, TURN_SPEED);
-  chassis.pid_wait();
-  chassis.pid_drive_set(13_in, DRIVE_SPEED, true);
-  chassis.pid_wait();
-  adi_digital_write(DOINKER2, true);
-  chassis.drive_mode_set(ez::DISABLE); // disable the PID after autonomous is done
-}void right_blue_auton_four_rings() {
-  // release the front intake part by unhooking the rubber band
-  toggle_intake(true, true);
-  delay(200);
-  toggle_intake(false, false);
-
-  chassis.pid_drive_set(-20.5_in, DRIVE_SPEED, true); // back up
-  chassis.pid_wait();
-  adi_digital_write(MOGO, false);
-  chassis.pid_turn_set(-30_deg, TURN_SPEED); // Turn to the mogo
-  chassis.pid_wait();
-  chassis.pid_drive_set(-16_in, 80, true); // back up into the mogo.
-  chassis.pid_wait();
-  chassis.pid_drive_set(-8_in, 80, true); // keep backing up the mogo while clamping onto it.
-  delay(90);
-  adi_digital_write(MOGO, true); // clamp on the mogo while slowly moving
-  chassis.pid_wait();
-  chassis.pid_drive_set(9.5_in, DRIVE_SPEED, true); // keep backing up the mogo while clamping onto it.
-  delay(100);
-  toggle_intake(true, false);
-  chassis.pid_wait();
-  chassis.pid_turn_set(-135_deg, TURN_SPEED);
-  chassis.pid_wait();
-  chassis.pid_drive_set(18.5_in, DRIVE_SPEED, true); // score the first ring, the closer ring to the ladder of the rings in the middle on the bottom
-  delay(100);
-  toggle_intake(true, true); // briefly reverse the intake so the hook can't get stuck
-  delay(100);
-  toggle_intake(true, false);
-  chassis.pid_wait();
-  delay(800);
-  chassis.pid_drive_set(-20.5_in, DRIVE_SPEED, true);
-  chassis.pid_wait();
-  chassis.pid_drive_set(10_in, DRIVE_SPEED, true);
-  chassis.pid_wait();
-  chassis.pid_turn_set(-70_deg, TURN_SPEED);
-  chassis.pid_wait();
-  chassis.pid_drive_set(10_in, 40, true);
-  delay(150);
-  toggle_intake(true, true); // briefly reverse the intake so the hook can't get stuck
-  delay(100);
-  toggle_intake(true, false);
-  chassis.pid_wait();
-  chassis.pid_turn_set(-125_deg, TURN_SPEED);
-  chassis.pid_wait();
-  chassis.pid_drive_set(10_in, DRIVE_SPEED, true);
-  chassis.pid_wait();
-  toggle_intake(true, true); // briefly reverse the intake so the hook can't get stuck
-  delay(100);
-  toggle_intake(true, false);
-  chassis.pid_turn_set(-165_deg, TURN_SPEED);
-  chassis.pid_wait();
-  chassis.pid_drive_set(7_in, DRIVE_SPEED, true);
-  chassis.pid_wait();
-  chassis.pid_drive_set(-10_in, DRIVE_SPEED, true);
-  chassis.pid_wait();
-  chassis.pid_turn_set(-215_deg, TURN_SPEED);
-  chassis.pid_wait();
-  chassis.pid_drive_set(13_in, DRIVE_SPEED, true);
-  chassis.pid_wait();
-  adi_digital_write(DOINKER, true);
-  chassis.drive_mode_set(ez::DISABLE); // disable the PID after autonomous is done
-} void skills() {
-  // release the front intake part by unhooking the rubber band
-  toggle_intake(true, true);
-  delay(200);
-  toggle_intake(false, false);
-
-  adi_digital_write(MOGO, true);
-  chassis.pid_drive_set(-16_in, 80, true); // back up into the mogo.
-  chassis.pid_wait();
-  chassis.pid_drive_set(-8_in, 80, true); // keep backing up the mogo while clamping onto it.
-  delay(90);
-  adi_digital_write(MOGO, false); // clamp on the mogo while slowly moving
-  chassis.pid_wait();
-  chassis.pid_drive_set(9.5_in, DRIVE_SPEED, true); // keep backing up the mogo while clamping onto it.
-  delay(100);
-  toggle_intake(true, false);
-  chassis.pid_wait();
-  chassis.pid_turn_set(-302_deg, TURN_SPEED); // turn towards the first ring
-  chassis.pid_wait();
-  toggle_intake(true, true); // briefly reverse the intake so the hook can't get stuck
-  delay(100);
-  toggle_intake(true, false);
-  chassis.pid_drive_set(30_in, 25, true);
-  delay(200);
-  toggle_intake(true, true); // briefly reverse the intake so the hook can't get stuck
-  delay(100);
-  toggle_intake(true, false);
-  chassis.pid_wait();
-  delay(400);
-  chassis.pid_turn_set(524_deg, TURN_SPEED); // turn towards the third ring
-  chassis.pid_wait();
-  chassis.pid_drive_set(15.2_in, 40, true); // get the third ring (go slow because the second ring takes time to intake
-  delay(100);
-  toggle_intake(true, true); // briefly reverse the intake so the hook can't get stuck
-  delay(100);
-  toggle_intake(true, false);
-  chassis.pid_wait();
-  chassis.pid_turn_set(215_deg, 127); // turn towards the fourth ring
-  chassis.pid_wait();
-  chassis.pid_drive_set(15_in, 60, true); // get the fourth
-  delay(100);
-  toggle_intake(true, true); // briefly reverse the intake so the hook can't get stuck
-  delay(100);
-  toggle_intake(true, false);
-  chassis.pid_wait();
-  chassis.pid_drive_set(15_in, DRIVE_SPEED, true); // get the fourth
-  chassis.pid_wait();
-  chassis.pid_turn_set(195.5_deg, TURN_SPEED); // turn towards the corner
-  chassis.pid_wait();
-  chassis.pid_drive_set(-52.5_in, DRIVE_SPEED, true); // used to be 51"
-  toggle_intake(true, true); // briefly reverse the intake so the hook can't get stuck
-  delay(100);
-  toggle_intake(true, false);
-  chassis.pid_wait();
-  adi_digital_write(MOGO, true); // release the first mogo in the corner
-  chassis.pid_drive_set(16.5_in, DRIVE_SPEED, true); // used to be 15 inches
-  chassis.pid_wait();
-  chassis.pid_turn_set(60.0_deg, TURN_SPEED); // turn towards the other corner on the starting side
-  chassis.pid_wait();
-  chassis.pid_drive_set(-68.0_in, DRIVE_SPEED, true);
-  chassis.pid_wait();
-  chassis.pid_turn_set(70_deg, TURN_SPEED);
-  chassis.pid_wait();
-  chassis.pid_drive_set(-10_in, DRIVE_SPEED, true);
-  chassis.pid_wait();
-  chassis.pid_turn_set(85_deg, TURN_SPEED);
-  chassis.pid_wait();
-  chassis.pid_drive_set(-33_in, DRIVE_SPEED, true);
-  chassis.pid_wait();
-  chassis.pid_drive_set(20_in, DRIVE_SPEED, true);
-  chassis.pid_wait();
-  chassis.pid_turn_set(-30_deg, TURN_SPEED);
-  chassis.pid_wait();
-  chassis.pid_drive_set(-50_in, DRIVE_SPEED, true);
-  chassis.pid_wait();
-  chassis.pid_turn_set(-55_deg, TURN_SPEED);
-  chassis.pid_wait();
-  chassis.pid_drive_set(-60_in, DRIVE_SPEED, true);
-  chassis.pid_wait();
-  chassis.pid_turn_set(35_deg, TURN_SPEED);
-  chassis.pid_wait();
-  chassis.pid_drive_set(-15_in, DRIVE_SPEED, true);
-  chassis.pid_wait();
-  chassis.pid_turn_set(45_deg, TURN_SPEED);
-  chassis.pid_wait();
-  chassis.pid_drive_set(-35_in, DRIVE_SPEED, true); // score the third mogo in the corner
-  chassis.pid_wait();
-
-  // score the fourth ring? 
-  chassis.pid_drive_set(10_in, DRIVE_SPEED, true);
-  chassis.pid_wait();
-  chassis.pid_turn_set(61.5_deg, TURN_SPEED);
-  chassis.pid_wait();
-  chassis.pid_drive_set(110_in, DRIVE_SPEED, true);
-  chassis.pid_wait();
-} void left_blue_auton_alliance_stake() {
-  for(int i = 0; i < 1000; i+=10) {
-    move_lb(1300);
-    delay(10);
-  }
-  for(int i = 0; i < 600; i+=10) {
-    move_lb(-120);
-    delay(10);
-  }
-  motor_tare_position(RIGHT_LB_MOTOR); // zero it out to the original position
-  chassis.pid_drive_set(-28_in, 60, true); // move is back slow so it doesn't bump the wrong color ring into the future path
-  chassis.pid_wait();
-  chassis.pid_turn_set(85_deg, 60);
-  chassis.pid_wait();
-  chassis.pid_drive_set(-17_in, 70, true);
-  chassis.pid_wait();
-
-  // clamp the mobile goal
-  chassis.pid_drive_set(-19_in, 60, true);
   delay(350);
-  adi_digital_write(MOGO, true);
+  chassis.pid_drive_set(-5_in, 127, true); // go away from the match loader tube
   chassis.pid_wait();
-  chassis.pid_drive_set(10_in, 127, true);
+  set_intake(false, false, false); // intake off
+  chassis.pid_turn_set(-46_deg, TURN_SPEED); // turn toward the middle goal
+  adi_digital_write(MATCH_LOADER, false);
   chassis.pid_wait();
-
-  // get ring on mobile goal then start moving toward the corner
-  toggle_intake(true, false);
-  chassis.pid_turn_set(135_deg, 110);
+  chassis.pid_drive_set(-54_in, DRIVE_SPEED, true);
   chassis.pid_wait();
-  chassis.pid_drive_set(28_in, 127, true); // grab the ring
-  chassis.pid_wait();
-  delay(500);
-  chassis.pid_turn_set(85_deg, 100);
-  chassis.pid_wait();
-  chassis.pid_drive_set(19_in, 127, true);
-  chassis.pid_wait();
-
-  chassis.pid_turn_set(30_deg, 100);
-  chassis.pid_wait();
-  chassis.pid_drive_set(14_in, 100, true);
-  toggle_intake(false, false);
-  chassis.pid_wait();
-  chassis.pid_turn_set(100_deg, 100);
-  toggle_intake(true, false);
-  chassis.pid_wait();
-  chassis.pid_drive_set(18_in, 50, true); // grab the bottom ring out of the corner
-  chassis.pid_wait();
-  chassis.pid_drive_set(-17_in, 40, true); // back out of the corner slowly
-  chassis.pid_wait();
-  chassis.pid_turn_set(-90_deg, 55);
-  chassis.pid_wait();
-  chassis.pid_drive_set(5_in, 127, true);
-  chassis.pid_wait();
-} void right_red_auton_alliance_stake() {
-  delay(3000);
-  for(int i = 0; i < 1000; i+=10) {
-    move_lb(1300);
-    delay(10);
-  }
-  for(int i = 0; i < 600; i+=10) {
-    move_lb(-120);
-    delay(10);
-  }
-  motor_tare_position(RIGHT_LB_MOTOR); // zero it out to the original position
-  chassis.pid_drive_set(-28_in, 60, true); // move is back slow so it doesn't bump the wrong color ring into the future path
-  chassis.pid_wait();
-  chassis.pid_turn_set(-85_deg, 60);
-  chassis.pid_wait();
-  chassis.pid_drive_set(-17_in, 70, true);
-  chassis.pid_wait();
-
-  // clamp the mobile goal
-  chassis.pid_drive_set(-19_in, 60, true);
-  delay(350);
-  adi_digital_write(MOGO, true);
-  chassis.pid_wait();
-  chassis.pid_drive_set(10_in, 127, true);
-  chassis.pid_wait();
-
-  // get ring on mobile goal then start moving toward the corner
-  toggle_intake(true, false);
-  chassis.pid_turn_set(-135_deg, 110);
-  chassis.pid_wait();
-  chassis.pid_drive_set(28_in, 127, true); // grab the ring
-  chassis.pid_wait();
-  delay(500);
-  chassis.pid_turn_set(-85_deg, 100);
-  chassis.pid_wait();
-  chassis.pid_drive_set(19_in, 127, true);
-  chassis.pid_wait();
-
-  chassis.pid_turn_set(-30_deg, 100);
-  chassis.pid_wait();
-  chassis.pid_drive_set(14_in, 100, true);
-  toggle_intake(false, false);
-  chassis.pid_wait();
-  chassis.pid_turn_set(-100_deg, 100);
-  toggle_intake(true, false);
-  chassis.pid_wait();
-  chassis.pid_drive_set(18_in, 50, true); // grab the bottom ring out of the corner
-  chassis.pid_wait();
-  chassis.pid_drive_set(-17_in, 40, true); // back out of the corner slowly
-  chassis.pid_wait();
-  chassis.pid_turn_set(90_deg, 55);
-  chassis.pid_wait();
-  chassis.pid_drive_set(5_in, 127, true);
-  chassis.pid_wait();
-} void goofftheline() {
-chassis.pid_drive_set(-10_in, 127, false);
-} void right_red_auton_no_alliance_stake() {
-  chassis.pid_drive_set(-28_in, 60, true); // move is back slow so it doesn't bump the wrong color ring into the future path
-  chassis.pid_wait();
-  chassis.pid_turn_set(-85_deg, 60);
-  chassis.pid_wait();
-  chassis.pid_drive_set(-17_in, 70, true);
-  chassis.pid_wait();
-
-  // clamp the mobile goal
-  chassis.pid_drive_set(-19_in, 60, true);
-  delay(350);
-  toggle_intake(true, false);
-  adi_digital_write(MOGO, true);
-  chassis.pid_wait();
-  chassis.pid_drive_set(10_in, 127, true);
-  chassis.pid_wait();
-
-  // get ring on mobile goal then start moving toward the corner
-  chassis.pid_turn_set(-135_deg, 110);
-  chassis.pid_wait();
-  chassis.pid_drive_set(28_in, 127, true); // grab the ring
-  chassis.pid_wait();
-  delay(500);
-  chassis.pid_turn_set(-85_deg, 100);
-  chassis.pid_wait();
-  chassis.pid_drive_set(19_in, 127, true);
-  chassis.pid_wait();
-
-  chassis.pid_turn_set(-30_deg, 100);
-  chassis.pid_wait();
-  chassis.pid_drive_set(14_in, 100, true);
-  toggle_intake(false, false);
-  chassis.pid_wait();
-  chassis.pid_turn_set(-100_deg, 100);
-  toggle_intake(true, false);
-  chassis.pid_wait();
-  chassis.pid_drive_set(18_in, 50, true); // grab the bottom ring out of the corner
-  chassis.pid_wait();
-  chassis.pid_drive_set(-17_in, 40, true); // back out of the corner slowly
-  chassis.pid_wait();
-  chassis.pid_turn_set(90_deg, 55);
-  chassis.pid_wait();
-  chassis.pid_drive_set(5_in, 127, true);
-  chassis.pid_wait();
-
-} void left_blue_auton_no_alliance_stake() {
-  chassis.pid_drive_set(-28_in, 60, true); // move is back slow so it doesn't bump the wrong color ring into the future path
-  chassis.pid_wait();
-  chassis.pid_turn_set(85_deg, 60);
-  chassis.pid_wait();
-  chassis.pid_drive_set(-17_in, 70, true);
-  chassis.pid_wait();
-
-  // clamp the mobile goal
-  chassis.pid_drive_set(-19_in, 60, true);
-  delay(350);
-  toggle_intake(true, false);
-  adi_digital_write(MOGO, true);
-  chassis.pid_wait();
-  chassis.pid_drive_set(10_in, 127, true);
-  chassis.pid_wait();
-
-  // get ring on mobile goal then start moving toward the corner
-  chassis.pid_turn_set(135_deg, 110);
-  chassis.pid_wait();
-  chassis.pid_drive_set(28_in, 127, true); // grab the ring
-  chassis.pid_wait();
-  delay(500);
-  chassis.pid_turn_set(85_deg, 100);
-  chassis.pid_wait();
-  chassis.pid_drive_set(19_in, 127, true);
-  chassis.pid_wait();
-
-  chassis.pid_turn_set(30_deg, 100);
-  chassis.pid_wait();
-  chassis.pid_drive_set(14_in, 100, true);
-  toggle_intake(false, false);
-  chassis.pid_wait();
-  chassis.pid_turn_set(100_deg, 100);
-  toggle_intake(true, false);
-  chassis.pid_wait();
-  chassis.pid_drive_set(18_in, 50, true); // grab the bottom ring out of the corner
-  chassis.pid_wait();
-  chassis.pid_drive_set(-17_in, 40, true); // back out of the corner slowly
-  chassis.pid_wait();
-  chassis.pid_turn_set(-90_deg, 55);
-  chassis.pid_wait();
-  chassis.pid_drive_set(5_in, 127, true);
-  chassis.pid_wait();
-}*/
-
+  set_intake(true, false, true);
+}
