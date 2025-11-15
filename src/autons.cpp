@@ -156,4 +156,7 @@ void right_auto() {
   chassis.pid_drive_set(-54_in, DRIVE_SPEED, true);
   chassis.pid_wait();
   set_intake(true, false, true);
+} void move_forward_an_inch() {
+  chassis.pid_drive_set(1_in, DRIVE_SPEED, true);
+  chassis.pid_wait();
 }
