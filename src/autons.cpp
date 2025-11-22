@@ -121,9 +121,9 @@ void right_auto() {
   chassis.pid_drive_set(15_in, 40, true); // slow down to get the balls easier
   chassis.pid_wait(); // pick up the three balls
 
-  chassis.pid_turn_set(-25_deg, TURN_SPEED); // go kind of towards the corner of the field 
+  chassis.pid_turn_set(-31_deg, TURN_SPEED); // go kind of towards the corner of the field 
   chassis.pid_wait();
-  chassis.pid_drive_set(28.5_in, 120, true); 
+  chassis.pid_drive_set(26.8_in, 120, true); 
   chassis.pid_wait();
   set_intake(false, false, false); // turn off the intake
   chassis.pid_turn_set(-90_deg, TURN_SPEED); // turn to the right angle so the robot can back up into the goal
@@ -138,22 +138,26 @@ void right_auto() {
   adi_digital_write(MATCH_LOADER, true);
   set_intake(false, false, false);
   delay(150);
+
+  chassis.pid_drive_set(28.5_in, 70, true); // drive away from long goal
+  delay(100);
   adi_digital_write(HOOD, true); // close the hood
   set_intake(true, false, false); // intake on
-  chassis.pid_drive_set(29_in, 70, true);
   chassis.pid_wait();
   chassis.pid_drive_set(-1.25_in, 50, true); // move back out of the tube a little to get the balls in the right spot
   chassis.pid_wait();
   chassis.pid_drive_set(0.5_in, DRIVE_SPEED, true);
   chassis.pid_wait();
   delay(350);
-  chassis.pid_drive_set(-5_in, 127, true); // go away from the match loader tube
+  chassis.pid_drive_set(-7_in, 127, true); // go away from the match loader tube
   chassis.pid_wait();
   set_intake(false, false, false); // intake off
   chassis.pid_turn_set(-46_deg, TURN_SPEED); // turn toward the middle goal
   adi_digital_write(MATCH_LOADER, false);
   chassis.pid_wait();
-  chassis.pid_drive_set(-54_in, DRIVE_SPEED, true);
+  chassis.pid_drive_set(-52.5_in, 85, true);
+  chassis.pid_wait();
+  chassis.pid_drive_set(-0.75_in, 45, true); // back slowly up
   chassis.pid_wait();
   set_intake(true, false, true);
 } void move_forward_an_inch() {
